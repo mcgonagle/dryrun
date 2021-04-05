@@ -5,7 +5,7 @@ metadata:
     app: redis
     cluster: redis
   name: redis
-  namespace: spinnaker3
+  namespace: spinnaker
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -44,7 +44,7 @@ metadata:
   labels:
     cluster: redis
   name: redis
-  namespace: spinnaker3
+  namespace: spinnaker
 spec:
   ports:
   - name: http

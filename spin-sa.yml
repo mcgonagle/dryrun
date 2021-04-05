@@ -106,7 +106,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: spin-sa
-    namespace: spinnaker3
+    namespace: spinnaker
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

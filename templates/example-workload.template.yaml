@@ -17,7 +17,7 @@ Resources:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
       ClusterName: !Ref KubeClusterName
-      Namespace: "spinnaker3"
+      Namespace: "spinnaker"
       # Kubernetes manifest URL
       Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/spin-secrets.yml
     DependsOn: "KubeManifestURLNSSpinnaker"
@@ -25,7 +25,7 @@ Resources:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
       ClusterName: !Ref KubeClusterName
-      Namespace: "spinnaker3"
+      Namespace: "spinnaker"
       # Kubernetes manifest URL
       Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/spin-sa.yml
     DependsOn: "KubeManifestURLSpinSecrets"
@@ -33,7 +33,7 @@ Resources:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
       ClusterName: !Ref KubeClusterName
-      Namespace: "spinnaker3"
+      Namespace: "spinnaker"
       # Kubernetes manifest URL
       Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/mysql.yml
     DependsOn: "KubeManifestURLSpinSA"
@@ -41,7 +41,15 @@ Resources:
     Type: "AWSQS::Kubernetes::Resource"
     Properties:
       ClusterName: !Ref KubeClusterName
-      Namespace: "spinnaker3"
+      Namespace: "spinnaker"
       # Kubernetes manifest URL
       Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/redis.yml
     DependsOn: "KubeManifestURLMYSQL"
+  KubeManifestURLNGINXIngress:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: "default"
+      # Kubernetes manifest URL
+      Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/nginx_ingress_deploy.yaml
+    DependsOn: "KubeManifestURLRedis"
