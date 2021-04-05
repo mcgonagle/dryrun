@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "deploy an example workload into an existing kubernetes cluster"
+Metadata:
+  cfn-lint: { config: { ignore_checks: [W9002, W9003, W9004, W9006, E9007] } }
+Parameters:
+  KubeClusterName:
+    Type: String
+Resources:
+  # This resource creates a ConfigMap in the target cluster. It retrieves and decrypts a kms encrypted
+  # kubernetes config file, which is automatically created when customers deploy an EKS cluster with the quickstart,
+  # for bring-your-own-cluster the customer must encrypt and upload a config file prior to launching the stack.
+  #
+  # The "URL" property is an exact representation of a regular kubernetes resource manifest, available by link
+  KubeManifestURLExample:
+    Type: "AWSQS::Kubernetes::Resource"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      Namespace: "default"
+      # Kubernetes manifest URL
+      Url: https://raw.githubusercontent.com/mcgonagle/dryrun/main/spinnaker_ns.yml
+  
