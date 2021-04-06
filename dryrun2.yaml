@@ -1,0 +1,281 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1beta1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/force-ssl-redirect":"true","nginx.ingress.kubernetes.io/ssl-redirect":"true"},"labels":{"app":"spin","cluster":"spin-ingress"},"name":"spin-ingress","namespace":"spinnaker"},"spec":{"rules":[{"host":"test.personalread.me","http":{"paths":[{"backend":{"serviceName":"spin-deck","servicePort":9000},"path":"/"}]}},{"host":"test.personalread.me","http":{"paths":[{"backend":{"serviceName":"spin-gate","servicePort":8084},"path":"/api/v1"}]}}],"tls":[{"hosts":["test.personalread.me"],"secretName":"tls-secret"}]}}
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    labels:
+      app: spin
+      cluster: spin-ingress
+    name: spin-ingress
+    namespace: spinnaker
+  spec:
+    rules:
+    - host: test.personalread.me
+      http:
+        paths:
+        - backend:
+            serviceName: spin-deck
+            servicePort: 9000
+          path: /
+    - host: test.personalread.me
+      http:
+        paths:
+        - backend:
+            serviceName: spin-gate
+            servicePort: 8084
+          path: /api/v1
+    tls:
+    - hosts:
+      - test.personalread.me
+      secretName: tls-secret
+- apiVersion: spinnaker.armory.io/v1alpha2
+  kind: SpinnakerService
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"spinnaker.armory.io/v1alpha2","kind":"SpinnakerService","metadata":{"annotations":{},"name":"spinnaker","namespace":"spinnaker"},"spec":{"expose":{"type":"ingress"},"kustomize":{"clouddriver":{},"deck":{},"echo":{},"front50":{},"gate":{},"igor":{},"orca":{},"rosco":{}},"spinnakerConfig":{"config":{"artifacts":{},"canary":{},"ci":{},"deploymentEnvironment":{"customSizing":{"clouddriver":{"limits":{"cpu":2,"memory":"4Gi"},"requests":{"cpu":"500m","memory":"2Gi"}},"deck":{"limits":{"cpu":"300m","memory":"64Mi"},"requests":{"cpu":"150m","memory":"32Mi"}},"dinghy":{"limits":{"cpu":"300m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"echo":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"150m","memory":"512Mi"}},"fiat":{"limits":{"cpu":"300m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"front50":{"limits":{"cpu":"300m","memory":"1Gi"},"requests":{"cpu":"150m","memory":"512Mi"}},"gate":{"limits":{"cpu":"600m","memory":"1Gi"},"requests":{"cpu":"300m","memory":"512Mi"}},"igor":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"kayenta":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"orca":{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"750m","memory":"512Mi"}},"redis":{"limits":{"cpu":"750m","memory":"1Gi"},"requests":{"cpu":"500m","memory":"512Mi"}},"rosco":{"limits":{"cpu":"300m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}},"spin-clouddriver":{"replicas":1},"terraformer":{"limits":{"cpu":"300m","memory":"512Mi"},"requests":{"cpu":"150m","memory":"256Mi"}}}},"features":{},"metricStores":{},"notifications":{},"persistentStorage":{"persistentStoreType":"s3","s3":{"bucket":"thomastesttestbucket","rootFolder":"front50"}},"providers":{"dockerRegistry":{"accounts":[{"address":"https://index.docker.io","cacheIntervalSeconds":30,"cacheThreads":1,"clientTimeoutMillis":60000,"email":"fake.email@spinnaker.io","insecureRegistry":false,"name":"dockerhub","paginateSize":100,"permissions":{},"providerVersion":"V1","repositories":["library/nginx"],"requiredGroupMembership":[],"sortTagsByDate":false,"trackDigests":false}],"enabled":true,"primaryAccount":"dockerhub"},"kubernetes":{"accounts":[{"cacheThreads":1,"cachingPolicies":[],"checkPermissionsOnStartup":true,"customResources":[],"dockerRegistries":[],"kinds":[],"liveManifestCalls":false,"name":"spinnaker","namespaces":[],"oAuthScopes":[],"omitKinds":[],"omitNamespaces":[],"onlySpinnakerManaged":false,"permissions":{},"providerVersion":"V2","serviceAccount":true}],"enabled":true,"primaryAccount":"spinnaker"}},"pubsub":{},"repository":{},"security":{},"spinnaker":{},"version":"2.21.0"},"profiles":{"clouddriver":{"dualTaskRepository":{"enabled":false,"previousClass":"com.netflix.spinnaker.clouddriver.data.task.jedis.RedisTaskRepository","primaryClass":"com.netflix.spinnaker.clouddriver.sql.SqlTaskRepository"},"redis":{"cache":{"enabled":false},"enabled":true,"scheduler":{"enabled":true},"taskRepository":{"enabled":false}},"sql":{"cache":{"enabled":true,"readBatchSize":500,"writeBatchSize":300},"connectionPools":{"default":{"default":true,"jdbcUrl":"jdbc:mysql://mysql:3306/clouddriver?useSSL=false\u0026useUnicode=true\u0026characterEncoding=utf8\u0026connectionCollation=utf8mb4_unicode_ci","password":"encrypted:k8s!n:spin-secrets!k:mysqlCdPassword","user":"clouddriver_service"},"tasks":{"jdbcUrl":"jdbc:mysql://mysql:3306/clouddriver?useSSL=false\u0026useUnicode=true\u0026characterEncoding=utf8\u0026connectionCollation=utf8mb4_unicode_ci","password":"encrypted:k8s!n:spin-secrets!k:mysqlCdPassword","user":"clouddriver_service"}},"enabled":true,"migration":{"jdbcUrl":"jdbc:mysql://mysql:3306/clouddriver?useSSL=false\u0026useUnicode=true\u0026characterEncoding=utf8\u0026connectionCollation=utf8mb4_unicode_ci","password":"encrypted:k8s!n:spin-secrets!k:mysqlCdMigratePassword","user":"clouddriver_migrate"},"scheduler":{"enabled":false},"taskRepository":{"enabled":true}}},"echo":{},"front50":{},"gate":{"redis":{"configuration":{"secure":true}}},"igor":{},"orca":{},"rosco":{},"settings-local.js":{},"spinnaker":{},"spinnakerconfig":{}},"service-settings":{"clouddriver":{"kubernetes":{"serviceAccountName":"spin-sa"}},"echo":{},"front50":{},"gate":{},"igor":{},"orca":{},"redis":{"overrideBaseUrl":"redis://redis:6379","skipLifeCycleManagement":true},"rosco":{},"spinnaker":{}}},"validation":{"providers":{"docker":{"enabled":true},"kubernetes":{"enabled":true}}}}}
+    name: spinnaker
+    namespace: spinnaker
+  spec:
+    expose:
+      type: ingress
+    kustomize:
+      clouddriver: {}
+      deck: {}
+      echo: {}
+      front50: {}
+      gate: {}
+      igor: {}
+      orca: {}
+      rosco: {}
+    spinnakerConfig:
+      config:
+        artifacts: {}
+        canary: {}
+        ci: {}
+        deploymentEnvironment:
+          customSizing:
+            clouddriver:
+              limits:
+                cpu: 2
+                memory: 4Gi
+              requests:
+                cpu: 500m
+                memory: 2Gi
+            deck:
+              limits:
+                cpu: 300m
+                memory: 64Mi
+              requests:
+                cpu: 150m
+                memory: 32Mi
+            dinghy:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+            echo:
+              limits:
+                cpu: 500m
+                memory: 1Gi
+              requests:
+                cpu: 150m
+                memory: 512Mi
+            fiat:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+            front50:
+              limits:
+                cpu: 300m
+                memory: 1Gi
+              requests:
+                cpu: 150m
+                memory: 512Mi
+            gate:
+              limits:
+                cpu: 600m
+                memory: 1Gi
+              requests:
+                cpu: 300m
+                memory: 512Mi
+            igor:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+            kayenta:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+            orca:
+              limits:
+                cpu: 1
+                memory: 1Gi
+              requests:
+                cpu: 750m
+                memory: 512Mi
+            redis:
+              limits:
+                cpu: 750m
+                memory: 1Gi
+              requests:
+                cpu: 500m
+                memory: 512Mi
+            rosco:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+            spin-clouddriver:
+              replicas: 1
+            terraformer:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 150m
+                memory: 256Mi
+        features: {}
+        metricStores: {}
+        notifications: {}
+        persistentStorage:
+          persistentStoreType: s3
+          s3:
+            bucket: thomastesttestbucket
+            rootFolder: front50
+        providers:
+          dockerRegistry:
+            accounts:
+            - address: https://index.docker.io
+              cacheIntervalSeconds: 30
+              cacheThreads: 1
+              clientTimeoutMillis: 60000
+              email: fake.email@spinnaker.io
+              insecureRegistry: false
+              name: dockerhub
+              paginateSize: 100
+              permissions: {}
+              providerVersion: V1
+              repositories:
+              - library/nginx
+              requiredGroupMembership: []
+              sortTagsByDate: false
+              trackDigests: false
+            enabled: true
+            primaryAccount: dockerhub
+          kubernetes:
+            accounts:
+            - cacheThreads: 1
+              cachingPolicies: []
+              checkPermissionsOnStartup: true
+              customResources: []
+              dockerRegistries: []
+              kinds: []
+              liveManifestCalls: false
+              name: spinnaker
+              namespaces: []
+              oAuthScopes: []
+              omitKinds: []
+              omitNamespaces: []
+              onlySpinnakerManaged: false
+              permissions: {}
+              providerVersion: V2
+              serviceAccount: true
+            enabled: true
+            primaryAccount: spinnaker
+        pubsub: {}
+        repository: {}
+        security: {}
+        spinnaker: {}
+        version: 2.21.0
+      profiles:
+        clouddriver:
+          dualTaskRepository:
+            enabled: false
+            previousClass: com.netflix.spinnaker.clouddriver.data.task.jedis.RedisTaskRepository
+            primaryClass: com.netflix.spinnaker.clouddriver.sql.SqlTaskRepository
+          redis:
+            cache:
+              enabled: false
+            enabled: true
+            scheduler:
+              enabled: true
+            taskRepository:
+              enabled: false
+          sql:
+            cache:
+              enabled: true
+              readBatchSize: 500
+              writeBatchSize: 300
+            connectionPools:
+              default:
+                default: true
+                jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
+                password: encrypted:k8s!n:spin-secrets!k:mysqlCdPassword
+                user: clouddriver_service
+              tasks:
+                jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
+                password: encrypted:k8s!n:spin-secrets!k:mysqlCdPassword
+                user: clouddriver_service
+            enabled: true
+            migration:
+              jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
+              password: encrypted:k8s!n:spin-secrets!k:mysqlCdMigratePassword
+              user: clouddriver_migrate
+            scheduler:
+              enabled: false
+            taskRepository:
+              enabled: true
+        echo: {}
+        front50: {}
+        gate:
+          redis:
+            configuration:
+              secure: true
+        igor: {}
+        orca: {}
+        rosco: {}
+        settings-local.js: {}
+        spinnaker: {}
+        spinnakerconfig: {}
+      service-settings:
+        clouddriver:
+          kubernetes:
+            serviceAccountName: spin-sa
+        echo: {}
+        front50: {}
+        gate: {}
+        igor: {}
+        orca: {}
+        redis:
+          overrideBaseUrl: redis://redis:6379
+          skipLifeCycleManagement: true
+        rosco: {}
+        spinnaker: {}
+    validation:
+      providers:
+        docker:
+          enabled: true
+        kubernetes:
+          enabled: true
+kind: List
+metadata: {}
