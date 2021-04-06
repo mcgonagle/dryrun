@@ -1,0 +1,218 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"spinnaker-operator","namespace":"spinnaker-operator"}}
+    name: spinnaker-operator
+    namespace: spinnaker-operator
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRole
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"spinnaker-operator-role"},"rules":[{"apiGroups":[""],"resources":["pods","ingresses/status","endpoints"],"verbs":["get","list","watch"]},{"apiGroups":[""],"resources":["services","events","configmaps","secrets","namespaces","ingresses"],"verbs":["create","get","list","update","watch","patch"]},{"apiGroups":["apps","extensions"],"resources":["deployments","daemonsets","replicasets","statefulsets"],"verbs":["create","get","list","update","watch","patch"]},{"apiGroups":["monitoring.coreos.com"],"resources":["servicemonitors"],"verbs":["get","create"]},{"apiGroups":["spinnaker.armory.io"],"resources":["*","spinnakerservices"],"verbs":["create","get","list","update","watch","patch"]},{"apiGroups":["spinnaker.io"],"resources":["spinnakeraccounts"],"verbs":["create","get","list","update","watch","patch"]},{"apiGroups":["admissionregistration.k8s.io"],"resources":["validatingwebhookconfigurations"],"verbs":["*"]},{"apiGroups":["networking.k8s.io","extensions"],"resources":["ingresses"],"verbs":["get","list","watch"]}]}
+    name: spinnaker-operator-role
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    - ingresses/status
+    - endpoints
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - services
+    - events
+    - configmaps
+    - secrets
+    - namespaces
+    - ingresses
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+    - patch
+  - apiGroups:
+    - apps
+    - extensions
+    resources:
+    - deployments
+    - daemonsets
+    - replicasets
+    - statefulsets
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+    - patch
+  - apiGroups:
+    - monitoring.coreos.com
+    resources:
+    - servicemonitors
+    verbs:
+    - get
+    - create
+  - apiGroups:
+    - spinnaker.armory.io
+    resources:
+    - '*'
+    - spinnakerservices
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+    - patch
+  - apiGroups:
+    - spinnaker.io
+    resources:
+    - spinnakeraccounts
+    verbs:
+    - create
+    - get
+    - list
+    - update
+    - watch
+    - patch
+  - apiGroups:
+    - admissionregistration.k8s.io
+    resources:
+    - validatingwebhookconfigurations
+    verbs:
+    - '*'
+  - apiGroups:
+    - networking.k8s.io
+    - extensions
+    resources:
+    - ingresses
+    verbs:
+    - get
+    - list
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRoleBinding","metadata":{"annotations":{},"name":"spinnaker-operator-binding"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"spinnaker-operator-role"},"subjects":[{"kind":"ServiceAccount","name":"spinnaker-operator","namespace":"spinnaker-operator"}]}
+    name: spinnaker-operator-binding
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: spinnaker-operator-role
+  subjects:
+  - kind: ServiceAccount
+    name: spinnaker-operator
+    namespace: spinnaker-operator
+- apiVersion: v1
+  data:
+    halyard-local.yml: |
+      halyard:
+        halconfig:
+          directory: /home/spinnaker/.hal
+
+      #spinnaker:
+      #  config:
+      #    # This section is used in air-gapped environments to specify an alternate location for spinnaker Bill Of Materials (BOM).
+      #    input:
+      #      gcs:
+      #        enabled: false                   # If the BOM is stored in a GCS bucket, switch this to true.
+      #      bucket: halconfig                  # Name of the bucket where spinnaker BOM is located.
+      #      region: us-west-2                  # Bucket region (region does not matter for Minio).
+      #      enablePathStyleAccess: false       # If you are using a platform that does not support PathStyleAccess, such as Minio, switch this to true (https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro).
+      #      endpoint: https://minio.minio:9000 # For s3 like storage with custom endpoint, such as Minio.
+      #      anonymousAccess: false
+
+      #secrets:
+      #  vault:
+      #    enabled: true
+      #    authMethod: KUBERNETES    # (Required). Method used to authenticate with the Vault endpoint. Must be either KUBERNETES for Kubernetes service account auth or TOKEN for Vault token auth.
+      #    url: https://vault.url    # (Required). URL of the Vault endpoint from Spinnaker services.
+      #    path: example             # (Default: kubernetes). Applies to KUBERNETES authentication method. Path of the kubernetes authentication backend mount.
+      #    role: example             # Applies to KUBERNETES authentication method. Name of the role against which the login is being attempted.
+      #    token: xxx
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"halyard-local.yml":"halyard:\n  halconfig:\n    directory: /home/spinnaker/.hal\n\n#spinnaker:\n#  config:\n#    # This section is used in air-gapped environments to specify an alternate location for spinnaker Bill Of Materials (BOM).\n#    input:\n#      gcs:\n#        enabled: false                   # If the BOM is stored in a GCS bucket, switch this to true.\n#      bucket: halconfig                  # Name of the bucket where spinnaker BOM is located.\n#      region: us-west-2                  # Bucket region (region does not matter for Minio).\n#      enablePathStyleAccess: false       # If you are using a platform that does not support PathStyleAccess, such as Minio, switch this to true (https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro).\n#      endpoint: https://minio.minio:9000 # For s3 like storage with custom endpoint, such as Minio.\n#      anonymousAccess: false\n\n#secrets:\n#  vault:\n#    enabled: true\n#    authMethod: KUBERNETES    # (Required). Method used to authenticate with the Vault endpoint. Must be either KUBERNETES for Kubernetes service account auth or TOKEN for Vault token auth.\n#    url: https://vault.url    # (Required). URL of the Vault endpoint from Spinnaker services.\n#    path: example             # (Default: kubernetes). Applies to KUBERNETES authentication method. Path of the kubernetes authentication backend mount.\n#    role: example             # Applies to KUBERNETES authentication method. Name of the role against which the login is being attempted.\n#    token: xxx\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"operator-config","namespace":"spinnaker-operator"}}
+    name: operator-config
+    namespace: spinnaker-operator
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"spinnaker-operator","namespace":"spinnaker-operator"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"spinnaker-operator"}},"template":{"metadata":{"labels":{"name":"spinnaker-operator"}},"spec":{"containers":[{"command":["spinnaker-operator"],"env":[{"name":"POD_NAME","valueFrom":{"fieldRef":{"fieldPath":"metadata.name"}}},{"name":"OPERATOR_NAME","value":"spinnaker-operator"}],"image":"armory/armory-operator:1.2.5","imagePullPolicy":"IfNotPresent","name":"spinnaker-operator","volumeMounts":[{"mountPath":"/opt/spinnaker/config/halyard.yml","name":"operator-config","subPath":"halyard-local.yml"}]},{"image":"armory/halyard-armory:1.10.1-2669348-operator","imagePullPolicy":"IfNotPresent","livenessProbe":{"initialDelaySeconds":30,"periodSeconds":20,"tcpSocket":{"port":8064}},"name":"halyard","ports":[{"containerPort":8064,"protocol":"TCP"}],"readinessProbe":{"failureThreshold":20,"httpGet":{"path":"/health","port":8064},"initialDelaySeconds":20,"periodSeconds":5},"volumeMounts":[{"mountPath":"/opt/spinnaker/config/halyard-local.yml","name":"operator-config","subPath":"halyard-local.yml"}]}],"serviceAccountName":"spinnaker-operator","volumes":[{"configMap":{"defaultMode":420,"name":"operator-config"},"name":"operator-config"}]}}}}
+    name: spinnaker-operator
+    namespace: spinnaker-operator
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: spinnaker-operator
+    template:
+      metadata:
+        labels:
+          name: spinnaker-operator
+      spec:
+        containers:
+        - command:
+          - spinnaker-operator
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: OPERATOR_NAME
+            value: spinnaker-operator
+          image: armory/armory-operator:1.2.5
+          imagePullPolicy: IfNotPresent
+          name: spinnaker-operator
+          volumeMounts:
+          - mountPath: /opt/spinnaker/config/halyard.yml
+            name: operator-config
+            subPath: halyard-local.yml
+        - image: armory/halyard-armory:1.10.1-2669348-operator
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            tcpSocket:
+              port: 8064
+          name: halyard
+          ports:
+          - containerPort: 8064
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /health
+              port: 8064
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          volumeMounts:
+          - mountPath: /opt/spinnaker/config/halyard-local.yml
+            name: operator-config
+            subPath: halyard-local.yml
+        serviceAccountName: spinnaker-operator
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: operator-config
+          name: operator-config
+kind: List
+metadata: {}
