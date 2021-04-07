@@ -16,14 +16,14 @@ items:
     namespace: spinnaker
   spec:
     rules:
-    - host: test.personalread.me
+    - host: "test.personalread.me"
       http:
         paths:
         - backend:
             serviceName: spin-deck
             servicePort: 9000
           path: /
-    - host: test.personalread.me
+    - host: "test.personalread.me"
       http:
         paths:
         - backend:
@@ -32,7 +32,7 @@ items:
           path: /api/v1
     tls:
     - hosts:
-      - test.personalread.me
+      - "test.personalread.me"
       secretName: tls-secret
 - apiVersion: spinnaker.armory.io/v1alpha2
   kind: SpinnakerService
