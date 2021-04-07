@@ -165,7 +165,7 @@ items:
         providers:
           dockerRegistry:
             accounts:
-            - address: https://index.docker.io
+            - address: "https://index.docker.io"
               cacheIntervalSeconds: 30
               cacheThreads: 1
               clientTimeoutMillis: 60000
@@ -211,8 +211,8 @@ items:
         clouddriver:
           dualTaskRepository:
             enabled: false
-            previousClass: com.netflix.spinnaker.clouddriver.data.task.jedis.RedisTaskRepository
-            primaryClass: com.netflix.spinnaker.clouddriver.sql.SqlTaskRepository
+            previousClass: "com.netflix.spinnaker.clouddriver.data.task.jedis.RedisTaskRepository"
+            primaryClass: "com.netflix.spinnaker.clouddriver.sql.SqlTaskRepository"
           redis:
             cache:
               enabled: false
@@ -229,17 +229,17 @@ items:
             connectionPools:
               default:
                 default: true
-                jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
-                password: encrypted:k8s!n:spin-secrets!k:mysqlCdPassword
+                jdbcUrl: "jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci"
+                password: "encrypted:k8s!n:spin-secrets!k:mysqlCdPassword"
                 user: clouddriver_service
               tasks:
-                jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
-                password: encrypted:k8s!n:spin-secrets!k:mysqlCdPassword
+                jdbcUrl: "jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci"
+                password: "encrypted:k8s!n:spin-secrets!k:mysqlCdPassword"
                 user: clouddriver_service
             enabled: true
             migration:
-              jdbcUrl: jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci
-              password: encrypted:k8s!n:spin-secrets!k:mysqlCdMigratePassword
+              jdbcUrl: "jdbc:mysql://mysql:3306/clouddriver?useSSL=false&useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci"
+              password: "encrypted:k8s!n:spin-secrets!k:mysqlCdMigratePassword"
               user: clouddriver_migrate
             scheduler:
               enabled: false
@@ -267,7 +267,7 @@ items:
         igor: {}
         orca: {}
         redis:
-          overrideBaseUrl: redis://redis:6379
+          overrideBaseUrl: "redis://redis:6379"
           skipLifeCycleManagement: true
         rosco: {}
         spinnaker: {}
